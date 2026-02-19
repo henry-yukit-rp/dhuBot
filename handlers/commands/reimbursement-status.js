@@ -40,13 +40,6 @@ function register(app) {
         return;
       }
 
-      // Show loading message
-      const loadingMessage = await client.chat.postEphemeral({
-        channel: channelId,
-        user: userId,
-        text: 'Fetching your reimbursement status...'
-      });
-
       // Get current reimbursements
       const usage = await getCurrentReimbursements(userConfig.apiToken, userConfig.accountId);
 
@@ -58,7 +51,7 @@ function register(app) {
 
       // Determine cutoff period
       const firstCutoff = isFirstCutoff();
-      const cutoffLabel = firstCutoff ? '1st Cutoff (1st - 15th)' : '2nd Cutoff (16th - End)';
+      const cutoffLabel = firstCutoff ? '1st Cutoff (1st - 15th)' : `2nd Cutoff (16th - ${dayjs().endOf("month").date()})`;
       const midpoint = getMidpointDate();
 
       // Create progress bars
