@@ -15,9 +15,8 @@ A Slack bot that makes expense reimbursements easy. Snap a receipt, let AI extra
 |------------|---------|
 | [Node.js](https://nodejs.org/) | Runtime |
 | [Slack Bolt](https://slack.dev/bolt-js/) | Slack app framework |
-| [Anthropic Claude](https://anthropic.com/) | AI receipt parsing (via AWS Bedrock) |
+| [Anthropic Claude](https://anthropic.com/) | AI receipt parsing (via AWS Bedrock and Launch Code integration) |
 | [Harvest API](https://help.getharvest.com/api-v2/) | Expense management |
-| [Day.js](https://day-sj.github.io/dayjs/) | Date handling |
 
 ## Commands
 
@@ -48,9 +47,6 @@ SLACK_BOT_TOKEN=xoxb-...
 SLACK_SIGNING_SECRET=...
 SLACK_APP_TOKEN=xapp-...
 
-# Harvest
-HARVEST_TOKEN=...
-HARVEST_ACCOUNT_ID=...
 
 # Claude API (via LaunchCode Bedrock Proxy)
 LAUNCHCODE_API_KEY=...
