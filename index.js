@@ -15,6 +15,7 @@ const app = new App({
 require('./handlers/commands/reimburse').register(app);
 require('./handlers/commands/configure').register(app);
 require('./handlers/commands/reimburse-quick').register(app);
+require('./handlers/commands/reimbursement-status').register(app);
 
 // Register view handlers
 require('./handlers/views/reimburse').register(app);
