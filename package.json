@@ -1,0 +1,28 @@
+{
+  "name": "dhubot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "bot": "nodemon index.js",
+    "claude": "node examples/claude-sdk-example.js",
+    "claude:agent": "node examples/claude-agent-example.mjs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@anthropic-ai/bedrock-sdk": "^0.26.3",
+    "@anthropic-ai/sdk": "^0.76.0",
+    "@slack/bolt": "^4.6.0",
+    "axios": "^1.13.5",
+    "dayjs": "^1.11.19",
+    "dotenv": "^17.3.1",
+    "form-data": "^4.0.5",
+    "nodemon": "^3.1.11",
+    "undici": "^7.22.0"
+  }
+}
