@@ -54,8 +54,6 @@ Important:
       ]
     });
 
-    console.log(response);
-
     const content = response.content[0].text.trim();
 
     // Try to parse the JSON response
