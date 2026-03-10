@@ -56,8 +56,8 @@ function register(app) {
       const wellnessLimitPHP = WELLNESS_LIMIT;
       const wellnessRemainingPHP = Math.max(0, wellnessLimitPHP - wellnessUsedPHP);
 
-      const transportationPercent = Math.min(100, (usage.transportation / TRANSPORTATION_LIMIT) * 100);
-      const wellnessPercent = Math.min(100, (usage.wellness / WELLNESS_LIMIT) * 100);
+      const transportationPercent = Math.min(100, (transportationUsedPHP / TRANSPORTATION_LIMIT) * 100);
+      const wellnessPercent = Math.min(100, (wellnessUsedPHP / WELLNESS_LIMIT) * 100);
 
       // Determine cutoff period
       const firstCutoff = isFirstCutoff();
