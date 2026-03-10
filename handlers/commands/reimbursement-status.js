@@ -1,10 +1,11 @@
 const { getUserConfig } = require('../../utils/config');
 const { getCurrentReimbursements, getMidpointDate } = require('../../utils/harvest');
+const { getRate } = require('../../utils/currency');
 const dayjs = require('dayjs');
 
 // Allowance limits per cutoff (in USD - since Harvest stores in USD)
-const TRANSPORTATION_LIMIT = 50; // ~2500 PHP
-const WELLNESS_LIMIT = 16.67;    // ~833.33 PHP
+const TRANSPORTATION_LIMIT = 2500; // ~2500 PHP
+const WELLNESS_LIMIT = 833.33;    // ~833.33 PHP
 
 function isFirstCutoff(date = dayjs()) {
   const midpoint = getMidpointDate(date);
@@ -43,8 +44,17 @@ function register(app) {
       // Get current reimbursements
       const usage = await getCurrentReimbursements(userConfig.apiToken, userConfig.accountId);
 
-      const transportationRemaining = Math.max(0, TRANSPORTATION_LIMIT - usage.transportation);
-      const wellnessRemaining = Math.max(0, WELLNESS_LIMIT - usage.wellness);
+      // Get live PHP exchange rate
+      const phpRate = await getRate('PHP');
+
+      // Convert USD amounts to PHP
+      const transportationUsedPHP = usage.transportation * phpRate;
+      const transportationLimitPHP = TRANSPORTATION_LIMIT;
+      const transportationRemainingPHP = Math.max(0, transportationLimitPHP - transportationUsedPHP);
+
+      const wellnessUsedPHP = usage.wellness * phpRate;
+      const wellnessLimitPHP = WELLNESS_LIMIT;
+      const wellnessRemainingPHP = Math.max(0, wellnessLimitPHP - wellnessUsedPHP);
 
       const transportationPercent = Math.min(100, (usage.transportation / TRANSPORTATION_LIMIT) * 100);
       const wellnessPercent = Math.min(100, (usage.wellness / WELLNESS_LIMIT) * 100);
@@ -89,14 +99,14 @@ function register(app) {
             type: 'section',
             text: {
               type: 'mrkdwn',
-              text: `*Transportation*\n${createProgressBar(transportationPercent)} ${transportationPercent.toFixed(0)}%\n\nUsed: *$${usage.transportation.toFixed(2)}* / $${TRANSPORTATION_LIMIT.toFixed(2)}\nRemaining: *$${transportationRemaining.toFixed(2)}*`
+              text: `*Transportation*\n${createProgressBar(transportationPercent)} ${transportationPercent.toFixed(0)}%\n\nUsed: *₱${transportationUsedPHP.toFixed(2)}* / ₱${transportationLimitPHP.toFixed(2)}\nRemaining: *₱${transportationRemainingPHP.toFixed(2)}*`
             }
           },
           {
             type: 'section',
             text: {
               type: 'mrkdwn',
-              text: `*Health & Wellness*\n${createProgressBar(wellnessPercent)} ${wellnessPercent.toFixed(0)}%\n\nUsed: *$${usage.wellness.toFixed(2)}* / $${WELLNESS_LIMIT.toFixed(2)}\nRemaining: *$${wellnessRemaining.toFixed(2)}*`
+              text: `*Health & Wellness*\n${createProgressBar(wellnessPercent)} ${wellnessPercent.toFixed(0)}%\n\nUsed: *₱${wellnessUsedPHP.toFixed(2)}* / ₱${wellnessLimitPHP.toFixed(2)}\nRemaining: *₱${wellnessRemainingPHP.toFixed(2)}*`
             }
           },
           {
